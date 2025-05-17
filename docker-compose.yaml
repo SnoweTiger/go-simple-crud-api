@@ -1,0 +1,29 @@
+version: '3.9'
+
+services:
+  # api:
+  #   container_name: api_container
+  #   build:
+  #     context: . 
+  #     dockerfile: Dockerfile
+  #   ports:
+  #     - ${API_PORT:?5000}:5000 # Forward the exposed port 8080 on the container to port 8080 on the host machine
+  #   restart: unless-stopped 
+
+  db:
+    image: postgres:latest
+    container_name: postgres_container
+    environment:
+      POSTGRES_USER: ${DB_USER:?root}
+      POSTGRES_PASSWORD: ${DB_PASS:?root}
+      POSTGRES_DB: ${DB_NAME:?blog}
+      PGDATA: /var/lib/postgresql/data/pgdata
+    ports:
+      - ${DB_PORT:?5432}:5432
+    volumes:
+      - ./pgdata:/var/lib/postgresql/data/pgdata
+    restart: unless-stopped
+
+volumes:
+  pgdata:
+    driver: local
