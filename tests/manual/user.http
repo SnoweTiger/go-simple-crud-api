@@ -1,28 +1,49 @@
 @host=localhost:5000
 
-### Create user
-POST http://{{host}}/api/users
+### Login user
+POST http://{{host}}/api/auth/login
+content-type: application/json
 
 {
-    "name": "Bob",
-    "login": "bob",
-    "password": "bob"
+    "login": "test",
+    "password": "test"
+}
+
+?? status == 200
+
+@token={{response.parsedBody.token}}
+
+### Create user
+POST http://{{host}}/api/users
+Authorization: Bearer {{token}}
+content-type: application/json
+
+{
+    "name": "Test2",
+    "login": "test2",
+    "password": "test"
 }
 
 ?? status == 201
 
 ### Get user
 GET http://{{host}}/api/users/2
+Authorization: Bearer {{token}}
+content-type: application/json
 
 ?? status == 200
 
 ### Get all users
 GET http://{{host}}/api/users
+Authorization: Bearer {{token}}
+content-type: application/json
 
 ?? status == 200
 
 ### Change user password
 PATCH http://{{host}}/api/users/changepass
+Authorization: Bearer {{token}}
+content-type: application/json
 
 {
     "id": 2,
@@ -34,6 +55,8 @@ PATCH http://{{host}}/api/users/changepass
 
 ### Update user 
 PUT http://{{host}}/api/users/
+Authorization: Bearer {{token}}
+content-type: application/json
 
 {
     "id": 1,
@@ -46,5 +69,7 @@ PUT http://{{host}}/api/users/
 
 ### Delete user 
 DELETE http://{{host}}/api/users/1
+Authorization: Bearer {{token}}
+content-type: application/json
 
 ?? status == 200

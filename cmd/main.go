@@ -5,6 +5,7 @@ import (
 
 	"github.com/SnoweTiger/go-simple-crud-api/pkg/auth"
 	"github.com/SnoweTiger/go-simple-crud-api/pkg/common/db"
+	"github.com/SnoweTiger/go-simple-crud-api/pkg/common/middlewares"
 	"github.com/SnoweTiger/go-simple-crud-api/pkg/users"
 	"github.com/gin-gonic/gin"
 	"github.com/spf13/viper"
@@ -26,6 +27,8 @@ func main() {
 
 	api := r.Group("/api")
 	auth.RegisterRoutes(api, h)
+
+	api.Use(middlewares.Auth())
 	users.RegisterRoutes(api, h)
 
 	r.Run("0.0.0.0:5000")
