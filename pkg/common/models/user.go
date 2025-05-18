@@ -6,5 +6,5 @@ type User struct {
 	Name     string    `json:"name" gorm:"size:255;not null"`      // Заголовок заметки
 	Login    string    `json:"login" gorm:"size:255;not null;unique"`
 	Password string    `json:"password" gorm:"size:255;not null"` // Содержание заметки
-	Articles []Article `json:"articles" gorm:"foreignKey:AuthorId"`
+	Articles []Article `json:"articles" gorm:"foreignKey:AuthorID"`
 }
