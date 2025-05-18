@@ -19,7 +19,7 @@ func RegisterRoutes(r *gin.Engine, db *gorm.DB) {
 	routes.GET("/", h.GetUsers)
 	routes.GET("/:id", h.GetUser)
 	routes.POST("/", h.AddUser)
-	// routes.PUT("/:id", h.UpdateUser)
+	routes.PUT("/", h.UpdateUser)
 	routes.PATCH("/changepass", h.ChangePass)
-	// routes.DELETE("/:id", h.DeleteUser)
+	routes.DELETE("/:id", h.DeleteUser)
 }

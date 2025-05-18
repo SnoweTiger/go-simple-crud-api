@@ -7,7 +7,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func (h handler) GetUser(c *gin.Context) {
+func (h handler) DeleteUser(c *gin.Context) {
 	id := c.Param("id")
 
 	var user models.User
@@ -17,11 +17,7 @@ func (h handler) GetUser(c *gin.Context) {
 		return
 	}
 
-	userResponse := UserResponse{
-		ID:    user.ID,
-		Login: user.Login,
-		Name:  user.Name,
-	}
+	h.DB.Delete(&user)
 
-	c.JSON(http.StatusOK, &userResponse)
+	c.Status(http.StatusOK)
 }
