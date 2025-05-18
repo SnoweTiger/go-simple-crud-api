@@ -68,8 +68,15 @@ content-type: application/json
 ?? status == 200
 
 ### Delete user 
-DELETE http://{{host}}/api/users/1
+DELETE http://{{host}}/api/users/4
 Authorization: Bearer {{token}}
 content-type: application/json
 
 ?? status == 200
+
+### Delete not existed user 
+DELETE http://{{host}}/api/users/100
+Authorization: Bearer {{token}}
+content-type: application/json
+
+?? status == 404

@@ -12,12 +12,15 @@ func (h handler) DeleteUser(c *gin.Context) {
 
 	var user models.User
 
-	if result := h.DB.First(&user, id); result.Error != nil {
-		c.AbortWithError(http.StatusNotFound, result.Error)
+	if err := h.DB.First(&user, id).Error; err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"error": err.Error()})
 		return
 	}
 
-	h.DB.Delete(&user)
+	if result := h.DB.Delete(&user); result.Error != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": result.Error.Error()})
+		return
+	}
 
 	c.Status(http.StatusOK)
 }
