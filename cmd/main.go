@@ -23,7 +23,8 @@ func main() {
 		})
 	})
 
-	users.RegisterRoutes(r, h)
+	api := r.Group("/api")
+	users.RegisterRoutes(api, h)
 
 	r.Run("0.0.0.0:5000")
 }
