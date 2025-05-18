@@ -19,8 +19,8 @@ Authorization: Bearer {{token}}
 content-type: application/json
 
 {
-    "name": "Test2",
-    "login": "test2",
+    "name": "Test3",
+    "login": "test3",
     "password": "test"
 }
 
@@ -46,9 +46,9 @@ Authorization: Bearer {{token}}
 content-type: application/json
 
 {
-    "id": 2,
-    "password": "bob",
-    "new_password": "bob2"
+    "id": 4,
+    "password": "test",
+    "new_password": "test"
 }
 
 ?? status == 202

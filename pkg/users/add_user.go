@@ -5,26 +5,15 @@ import (
 	"net/http"
 	"strings"
 
+	"github.com/SnoweTiger/go-simple-crud-api/pkg/common/dto"
 	"github.com/SnoweTiger/go-simple-crud-api/pkg/common/models"
 	"github.com/gin-gonic/gin"
 
 	"golang.org/x/crypto/bcrypt"
 )
 
-type AddUserRequest struct {
-	Name     string `json:"name"`
-	Login    string `json:"login"`
-	Password string `json:"password"`
-}
-
-type UserResponse struct {
-	ID    uint   `json:"id"`
-	Name  string `json:"name"`
-	Login string `json:"login"`
-}
-
 func (h handler) AddUser(c *gin.Context) {
-	body := AddUserRequest{}
+	body := dto.CreateUserDTO{}
 
 	if err := c.ShouldBindJSON(&body); err != nil {
 		c.AbortWithError(http.StatusBadRequest, err)
@@ -48,7 +37,7 @@ func (h handler) AddUser(c *gin.Context) {
 		return
 	}
 
-	userResponse := UserResponse{
+	userResponse := dto.UserDTO{
 		ID:    user.ID,
 		Login: user.Login,
 		Name:  user.Name,

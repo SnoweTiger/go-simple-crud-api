@@ -3,20 +3,15 @@ package users
 import (
 	"net/http"
 
+	"github.com/SnoweTiger/go-simple-crud-api/pkg/common/dto"
 	"github.com/SnoweTiger/go-simple-crud-api/pkg/common/models"
 	"github.com/SnoweTiger/go-simple-crud-api/pkg/common/utils"
 	"github.com/gin-gonic/gin"
 	"golang.org/x/crypto/bcrypt"
 )
 
-type ChangePassRequest struct {
-	ID          int    `json:"id"`
-	Password    string `json:"password"`
-	NewPassword string `json:"new_password"`
-}
-
 func (h handler) ChangePass(c *gin.Context) {
-	body := ChangePassRequest{}
+	body := dto.ChangePassDTO{}
 
 	if err := c.ShouldBindJSON(&body); err != nil {
 		c.AbortWithError(http.StatusBadRequest, err)

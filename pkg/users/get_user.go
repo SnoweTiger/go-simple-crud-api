@@ -3,6 +3,7 @@ package users
 import (
 	"net/http"
 
+	"github.com/SnoweTiger/go-simple-crud-api/pkg/common/dto"
 	"github.com/SnoweTiger/go-simple-crud-api/pkg/common/models"
 	"github.com/gin-gonic/gin"
 )
@@ -12,16 +13,26 @@ func (h handler) GetUser(c *gin.Context) {
 
 	var user models.User
 
-	if result := h.DB.First(&user, id); result.Error != nil {
-		c.AbortWithError(http.StatusNotFound, result.Error)
+	if err := h.DB.Model(&models.User{}).Preload("Articles").First(&user, id).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, err)
 		return
 	}
 
-	userResponse := UserResponse{
-		ID:    user.ID,
-		Login: user.Login,
-		Name:  user.Name,
+	var articlesDTO []dto.ArticleDTO
+	for _, a := range user.Articles {
+		articlesDTO = append(articlesDTO, dto.ArticleDTO{
+			ID:    a.ID,
+			Title: a.Title,
+		})
 	}
 
-	c.JSON(http.StatusOK, &userResponse)
+	data := dto.UserDataDTO{
+		User: dto.UserDTO{
+			ID:   user.ID,
+			Name: user.Name,
+		},
+		Articles: articlesDTO,
+	}
+
+	c.JSON(http.StatusOK, &data)
 }
