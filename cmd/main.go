@@ -3,6 +3,7 @@ package main
 import (
 	"net/http"
 
+	"github.com/SnoweTiger/go-simple-crud-api/pkg/auth"
 	"github.com/SnoweTiger/go-simple-crud-api/pkg/common/db"
 	"github.com/SnoweTiger/go-simple-crud-api/pkg/users"
 	"github.com/gin-gonic/gin"
@@ -24,6 +25,7 @@ func main() {
 	})
 
 	api := r.Group("/api")
+	auth.RegisterRoutes(api, h)
 	users.RegisterRoutes(api, h)
 
 	r.Run("0.0.0.0:5000")

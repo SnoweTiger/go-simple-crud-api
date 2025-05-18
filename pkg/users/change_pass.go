@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/SnoweTiger/go-simple-crud-api/pkg/common/models"
+	"github.com/SnoweTiger/go-simple-crud-api/pkg/common/utils"
 	"github.com/gin-gonic/gin"
 	"golang.org/x/crypto/bcrypt"
 )
@@ -28,7 +29,7 @@ func (h handler) ChangePass(c *gin.Context) {
 		return
 	}
 
-	err := VerifyPassword(body.Password, user.Password)
+	err := utils.VerifyPassword(body.Password, user.Password)
 	if err != nil && err == bcrypt.ErrMismatchedHashAndPassword {
 		c.AbortWithStatus(http.StatusForbidden)
 		return
@@ -48,8 +49,4 @@ func (h handler) ChangePass(c *gin.Context) {
 	}
 
 	c.Status(http.StatusAccepted)
-}
-
-func VerifyPassword(password, hashedPassword string) error {
-	return bcrypt.CompareHashAndPassword([]byte(hashedPassword), []byte(password))
 }

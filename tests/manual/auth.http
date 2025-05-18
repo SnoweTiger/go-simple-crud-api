@@ -1,0 +1,11 @@
+@host=localhost:5000
+
+### Login user
+POST http://{{host}}/api/auth/login
+
+{
+    "login": "test",
+    "password": "test"
+}
+
+?? status == 200
