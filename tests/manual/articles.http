@@ -1,0 +1,62 @@
+@host=localhost:5000
+
+### Login user
+POST http://{{host}}/api/auth/login
+content-type: application/json
+
+{
+    "login": "test",
+    "password": "test"
+}
+
+?? status == 200
+
+@token={{response.parsedBody.token}}
+
+### Create article
+POST http://{{host}}/api/articles
+content-type: application/json
+Authorization: Bearer {{token}}
+
+{
+    "title": "Title 1",
+    "content": "Content",
+    "authorId": 2
+}
+
+?? status == 201
+
+### Get all articles
+GET http://{{host}}/api/articles
+content-type: application/json
+
+?? status == 200
+
+### Get all articles by Author
+POST http://{{host}}/api/articles/byAuthor
+content-type: application/json
+
+{
+    "authorId": 2
+}
+
+?? status == 200
+
+### Update article
+PUT http://{{host}}/api/articles
+content-type: application/json
+
+{
+    "id": 3,
+    "title": "Title 1 updated",
+    "content": "Content updated",
+    "authorId": 2
+}
+
+?? status == 200
+
+### Delete article 
+DELETE http://{{host}}/api/articles/3
+content-type: application/json
+
+?? status == 200
