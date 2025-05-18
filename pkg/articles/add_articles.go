@@ -3,41 +3,42 @@ package articles
 import (
 	"net/http"
 
+	"github.com/SnoweTiger/go-simple-crud-api/pkg/common/dto"
 	"github.com/SnoweTiger/go-simple-crud-api/pkg/common/models"
+	"github.com/SnoweTiger/go-simple-crud-api/pkg/common/utils"
 	"github.com/gin-gonic/gin"
 )
 
-type AddArticleRequest struct {
-	Title    string `json:"title"`
-	Content  string `json:"content"`
-	AuthorId uint   `json:"authorId"`
-}
-
 func (h handler) AddArticle(c *gin.Context) {
-	body := AddArticleRequest{}
-
+	body := dto.AddArticleDTO{}
 	if err := c.ShouldBindJSON(&body); err != nil {
 		c.AbortWithError(http.StatusBadRequest, err)
 		return
 	}
 
-	// userID, err := utils.GetTokenData(c)
-	// if err != nil {
-	// 	c.AbortWithError(http.StatusBadRequest, err)
-	// 	return
-	// }
-
-	// fmt.Printf("userId = %d", userID)
-
-	var article models.Article
-	article.Title = body.Title
-	article.Content = body.Content
-	article.AuthorId = body.AuthorId
-
-	if err := h.DB.Create(&article).Error; err != nil {
+	userID, err := utils.GetTokenData(c)
+	if err != nil {
 		c.AbortWithError(http.StatusBadRequest, err)
 		return
 	}
 
-	c.JSON(http.StatusCreated, &article)
+	article := models.Article{
+		Title:    body.Title,
+		Content:  body.Content,
+		AuthorID: userID,
+	}
+
+	if err := h.DB.Create(&article).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, err)
+		return
+	}
+
+	articleDTO := dto.ArticleDTO{
+		ID:       article.ID,
+		Title:    article.Title,
+		Content:  article.Content,
+		AuthorID: article.AuthorID,
+	}
+
+	c.JSON(http.StatusCreated, &articleDTO)
 }

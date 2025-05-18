@@ -19,7 +19,7 @@ content-type: application/json
 Authorization: Bearer {{token}}
 
 {
-    "title": "Title 1",
+    "title": "Title 10",
     "content": "Content",
     "authorId": 2
 }

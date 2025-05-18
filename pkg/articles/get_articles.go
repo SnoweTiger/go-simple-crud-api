@@ -3,39 +3,31 @@ package articles
 import (
 	"net/http"
 
+	"github.com/SnoweTiger/go-simple-crud-api/pkg/common/dto"
 	"github.com/SnoweTiger/go-simple-crud-api/pkg/common/models"
 	"github.com/gin-gonic/gin"
 )
 
-type ArticlesRequest struct {
-	AuthorId uint `json:"authorId"`
-}
-
 func (h handler) GetArticles(c *gin.Context) {
 	var articles []models.Article
 
-	if result := h.DB.Find(&articles); result.Error != nil {
-		c.AbortWithError(http.StatusNotFound, result.Error)
+	if err := h.DB.Model(&models.Article{}).Preload("Author").Find(&articles).Error; err != nil {
+		c.AbortWithError(http.StatusInternalServerError, err)
 		return
 	}
 
-	c.JSON(http.StatusOK, articles)
-}
-
-func (h handler) GetArticlesByAuthor(c *gin.Context) {
-	body := ArticlesRequest{}
-
-	if err := c.ShouldBindJSON(&body); err != nil {
-		c.AbortWithError(http.StatusBadRequest, err)
-		return
+	var articlesDTO []dto.ArticleDTO
+	for _, a := range articles {
+		articlesDTO = append(articlesDTO, dto.ArticleDTO{
+			ID:      a.ID,
+			Title:   a.Title,
+			Content: a.Content,
+			Author: dto.AuthorDTO{
+				ID:   a.Author.ID,
+				Name: a.Author.Name,
+			},
+		})
 	}
 
-	var articles []models.Article
-
-	if err := h.DB.Find(&articles, "author_id = ?", body.AuthorId).Error; err != nil {
-		c.AbortWithError(http.StatusNotFound, err)
-		return
-	}
-
-	c.JSON(http.StatusOK, articles)
+	c.JSON(http.StatusOK, articlesDTO)
 }
