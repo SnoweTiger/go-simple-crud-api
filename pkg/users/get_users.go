@@ -12,8 +12,8 @@ func (h handler) GetUsers(c *gin.Context) {
 	var users []models.User
 	var usersResponse []dto.UserDTO
 
-	if result := h.DB.Find(&users); result.Error != nil {
-		c.AbortWithError(http.StatusNotFound, result.Error)
+	if err := h.DB.Find(&users).Error; err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 

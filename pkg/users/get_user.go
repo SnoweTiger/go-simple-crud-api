@@ -14,7 +14,7 @@ func (h handler) GetUser(c *gin.Context) {
 	var user models.User
 
 	if err := h.DB.Model(&models.User{}).Preload("Articles").First(&user, id).Error; err != nil {
-		c.JSON(http.StatusInternalServerError, err)
+		c.JSON(http.StatusNotFound, gin.H{"error": err.Error()})
 		return
 	}
 

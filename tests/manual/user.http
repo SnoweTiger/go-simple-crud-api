@@ -46,7 +46,7 @@ Authorization: Bearer {{token}}
 content-type: application/json
 
 {
-    "id": 4,
+    "id": 3,
     "password": "test",
     "new_password": "test"
 }
@@ -68,7 +68,7 @@ content-type: application/json
 ?? status == 200
 
 ### Delete user 
-DELETE http://{{host}}/api/users/4
+DELETE http://{{host}}/api/users/1
 Authorization: Bearer {{token}}
 content-type: application/json
 
