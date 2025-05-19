@@ -13,7 +13,7 @@ func (h handler) Login(c *gin.Context) {
 	login := dto.LoginDTO{}
 
 	if err := c.ShouldBindJSON(&login); err != nil {
-		c.AbortWithError(http.StatusBadRequest, err)
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
