@@ -10,7 +10,7 @@ import (
 func Auth() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		if err := utils.TokenValid(c); err != nil {
-			c.String(http.StatusUnauthorized, "Unauthorized")
+			c.JSON(http.StatusBadRequest, gin.H{"error": "Unauthorized"})
 			c.Abort()
 			return
 		}
