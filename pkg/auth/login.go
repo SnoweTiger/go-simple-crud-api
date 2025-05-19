@@ -3,23 +3,14 @@ package auth
 import (
 	"net/http"
 
+	"github.com/SnoweTiger/go-simple-crud-api/pkg/common/dto"
 	"github.com/SnoweTiger/go-simple-crud-api/pkg/common/utils"
 	"github.com/gin-gonic/gin"
 )
 
-type LoginRequest struct {
-	Login    string `json:"login" `
-	Password string `json:"password"`
-}
-
-type LoginResponse struct {
-	Login string `json:"login"`
-	Token string `json:"token"`
-}
-
 // Login method
 func (h handler) Login(c *gin.Context) {
-	login := LoginRequest{}
+	login := dto.LoginDTO{}
 
 	if err := c.ShouldBindJSON(&login); err != nil {
 		c.AbortWithError(http.StatusBadRequest, err)
@@ -32,6 +23,6 @@ func (h handler) Login(c *gin.Context) {
 		return
 	}
 
-	response := LoginResponse{Login: login.Login, Token: token}
+	response := dto.LoginRespDTO{Login: login.Login, Token: token}
 	c.JSON(http.StatusOK, &response)
 }
