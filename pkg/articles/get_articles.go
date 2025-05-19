@@ -12,7 +12,7 @@ func (h handler) GetArticles(c *gin.Context) {
 	var articles []models.Article
 
 	if err := h.DB.Model(&models.Article{}).Preload("Author").Find(&articles).Error; err != nil {
-		c.AbortWithError(http.StatusInternalServerError, err)
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 

@@ -12,8 +12,13 @@ func (h handler) DeleteArticle(c *gin.Context) {
 
 	var article models.Article
 
-	if result := h.DB.First(&article, id); result.Error != nil {
-		c.AbortWithError(http.StatusNotFound, result.Error)
+	if err := h.DB.First(&article, id).Error; err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"error": err.Error()})
+		return
+	}
+
+	if err := h.DB.Delete(&article).Error; err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 

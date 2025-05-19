@@ -21,18 +21,15 @@ func main() {
 	h := db.Init(dbUrl)
 
 	r.GET("/ping", func(c *gin.Context) {
-		c.JSON(http.StatusOK, gin.H{
-			"message": "pong",
-		})
+		c.JSON(http.StatusOK, gin.H{"message": "pong"})
 	})
 
 	api := r.Group("/api")
 	auth.RegisterRoutes(api, h)
 
-	articles.RegisterRoutes(api, h)
-
 	api.Use(middlewares.Auth())
 	users.RegisterRoutes(api, h)
+	articles.RegisterRoutes(api, h)
 
 	r.Run("0.0.0.0:5000")
 }

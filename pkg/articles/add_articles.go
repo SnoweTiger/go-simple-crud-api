@@ -12,13 +12,13 @@ import (
 func (h handler) AddArticle(c *gin.Context) {
 	body := dto.AddArticleDTO{}
 	if err := c.ShouldBindJSON(&body); err != nil {
-		c.AbortWithError(http.StatusBadRequest, err)
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
 	userID, err := utils.GetTokenData(c)
 	if err != nil {
-		c.AbortWithError(http.StatusBadRequest, err)
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 
@@ -29,7 +29,7 @@ func (h handler) AddArticle(c *gin.Context) {
 	}
 
 	if err := h.DB.Create(&article).Error; err != nil {
-		c.JSON(http.StatusInternalServerError, err)
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 

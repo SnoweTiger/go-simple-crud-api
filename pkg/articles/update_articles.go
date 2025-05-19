@@ -11,12 +11,12 @@ func (h handler) UpdateArticles(c *gin.Context) {
 	article := models.Article{}
 
 	if err := c.ShouldBindJSON(&article); err != nil {
-		c.AbortWithError(http.StatusBadRequest, err)
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
 	if err := h.DB.Save(&article).Error; err != nil {
-		c.AbortWithError(http.StatusInternalServerError, err)
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 
